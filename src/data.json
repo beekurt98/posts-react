@@ -1,0 +1,52 @@
+[
+    {
+        "name": "Noah Pierre",
+        "time": "58 minutes ago",
+        "comment": "I'm a bit unclear about how condensation forms in the water cycle. Can someone break it down?",
+        "likes": 25,
+        "dislikes": 3,
+        "replies": [
+            {
+                "name": "Skill Sprout",
+                "time": "8 minutes ago",
+                "comment": "Condensation happens when water vapor cools down and changes back into liquid droplets. It’s the step before precipitation. The example with the glass of ice water in the video was a great visual!",
+                "likes": 2,
+                "dislikes": 0,
+                "replies": []
+            }
+        ]
+    },
+    {
+        "name": "Mollie Hall",
+        "time": "5 hours ago",
+        "comment": "I really enjoyed today’s lesson on the water cycle! The animations made the processes so much easier to grasp.",
+        "likes": 8,
+        "dislikes": 2,
+        "replies": []
+    },
+    {
+        "name": "Lyle Kauffman",
+        "time": "1 day ago",
+        "comment": "How do we measure the amount of water vapor in the air? Is it something we'll cover later?",
+        "likes": 12,
+        "dislikes": 0,
+        "replies": [
+            {
+                "name": "Amanda Lowery",
+                "time": "12 hours ago",
+                "comment": "Yes, I think we'll dive deeper into that in the next module on humidity. But the short answer is: we measure it using a tool called a hygrometer.",
+                "likes": 8,
+                "dislikes": 1,
+                "replies": []
+            },
+            {
+                "name": "Owen Garcia",
+                "time": "2 hours ago",
+                "comment": "Exactly! The next lesson will cover humidity, and I’m excited to see how it all connects back to the water cycle.",
+                "likes": 4,
+                "dislikes": 0,
+                "replies": []
+            }
+        ]
+    }
+]
