@@ -24,7 +24,7 @@ function App() {
 
   useEffect(() => {
     async function getData() {
-      const data = await fetch('./src/data.json').then(res => res.json())
+      const data = await fetch('https://api.npoint.io/66575b019f7534b35ead').then(res => res.json())
       setPosts(data)
     }
 
