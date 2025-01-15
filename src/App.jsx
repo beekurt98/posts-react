@@ -1,12 +1,12 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import './App.css'
 import EmojiPicker from 'emoji-picker-react';
+import { marked } from "https://cdn.jsdelivr.net/npm/marked/lib/marked.esm.js";
+
 
 // todo: if liked, remove dislike & vice versa
-// add markdown stuff to input field
-// add links
 // open photo onclick as dialog
-// bold etc: use replace str
+// add bold etc to replies
 
 function App() {
   const [posts, setPosts] = useState([])
@@ -14,12 +14,13 @@ function App() {
   // writing controls
   const [emojiScreenOn, setEmojiScreen] = useState(false)
   const [input, setInput] = useState("")
-  const [selectedText, setSelectedText] = useState("")
-  const [img, setImg] = useState(null)
   // img controls
-  const [imagesDiv, setImagesDiv] = useState(false)
   const [imgs, setImgs] = useState([])
   const [imgToShow, setImgToShow] = useState(null)
+  const [addImg, setAddImg] = useState(false)
+  const textareaRef = useRef(null)
+  // link control
+  const [showLink, setShowLink] = useState(false)
 
   useEffect(() => {
     async function getData() {
@@ -56,31 +57,54 @@ function App() {
   }
 
   function handleEmoji(e) {
-    // e.preventDefault()
     setInput(prevInput => prevInput + e.emoji)
   }
 
-  function handleBold(e) {
-    e.preventDefault()
-    setSelectedText(`**${selectedText}**`)
-    console.log(selectedText)
+  function handleBold() {
+    let selectText = handleSelection()
+    setInput(input.replace(selectText, `**${selectText}**`))
+  }
+
+  function handleItalic() {
+    let selectText = handleSelection()
+    setInput(input.replace(selectText, `*${selectText}*`))
+  }
+
+  function handleUnderline() {
+    let selectText = handleSelection()
+    setInput(input.replace(selectText, `<u>${selectText}</u>`))
+  }
+
+  function handleLink(e) {
+    e.preventDefault();
+    const formData = new FormData(e.target)
+    const formObj = Object.fromEntries(formData)
+    console.log(formObj)
+    setInput(prevInput => prevInput + `[${formObj.linkTitle}](${formObj.linkUrl})`)
+
+    e.target.reset()
   }
 
   function handleCommentInput(e) {
     setInput(e.target.value)
   }
 
-  function handleSelection(e) {
-    e.preventDefault()
-    setSelectedText(e.target.value)
+  function handleSelection() {
+    const start = textareaRef.current.selectionStart
+    const end = textareaRef.current.selectionEnd
+    const txt = input.slice(start, end)
+    // setSelectedText(txt)
+    return txt;
   }
 
-  function deleteImg(img) {
-    setImgs(imgs.filter(x => x !== img))
-  }
+  function handleAddImg(e) {
+    e.preventDefault();
+    const formData = new FormData(e.target)
+    const formObj = Object.fromEntries(formData)
+    console.log(formObj)
+    setInput(prevInput => prevInput + `![${formObj.imgAlt}](${formObj.imgUrl})`)
 
-  function handleOnFocus(e) {
-    console.log(e.target.value, "r")
+    e.target.reset()
   }
 
   return (
@@ -88,34 +112,39 @@ function App() {
       <h1>hey</h1>
       <div className="write-comment">
         <form onSubmit={handleCommentSubmit}>
-          <input onDoubleClick={handleSelection} onFocus={handleOnFocus} autoComplete="off" className='comment-main-input' onChange={handleCommentInput} value={input} type="text" name="comment" id="" placeholder='Add comment...' />
-
+          <textarea ref={textareaRef} onSelect={handleSelection} onDoubleClick={handleSelection} autoComplete="off" className='comment-main-input' onChange={handleCommentInput} value={input} type="text" name="comment" id="" placeholder='Add comment...' ></textarea>
           <input type="submit" value="Submit" />
-
         </form>
-        {
-          imagesDiv && <div className="images-div">
-            {
-              imgs.map((img, index) => {
-                return <>
-                  <img key={index} className='user-img' src={img} alt="" />
-                  <button onClick={(e) => { e.preventDefault(); deleteImg(img); }}>X</button>
-                </>
-
-              })
-            }
-          </div>
-        }
         <div className="control">
           <button onClick={handleBold}>B</button>
-          <button><em>I</em></button>
-          <button><u>U</u></button>
+          <button onClick={handleItalic}><em>I</em></button>
+          <button onClick={handleUnderline}><u>U</u></button>
           <span className="vertical-line"></span>
-          <button>🔗</button>
-          <ImageInput imgs={imgs} setImgs={setImgs} setImagesDiv={setImagesDiv} img={img} setImg={setImg} />
-          <button onClick={(e) => { e.preventDefault(); setEmojiScreen(!emojiScreenOn) }}>☺️</button>
+          <button key={crypto.randomUUID()} onClick={() => {setShowLink(!showLink); setAddImg(false); setEmojiScreen(false)}}>🔗</button>
+          
+          <button key={crypto.randomUUID()} onClick={() => {setAddImg(!addImg); setShowLink(false); setEmojiScreen(false) }}>🖼️</button>
+          
+          <button onClick={(e) => { e.preventDefault(); setEmojiScreen(!emojiScreenOn); setShowLink(false); setAddImg(false) }}>☺️</button>
           {
             emojiScreenOn && <EmojiPicker onEmojiClick={handleEmoji} />
+          }
+          {
+            addImg && <div>
+            <form onSubmit={handleAddImg}>
+              <input type="text" placeholder='image alt' name='imgAlt' />
+              <input type="text" placeholder='image url' name="imgUrl" />
+              <input type="submit" name="" value="submit" />
+            </form>
+          </div>
+          }
+          {
+            showLink && <div>
+              <form onSubmit={handleLink}>
+                <input type="text" placeholder='link title' name='linkTitle' />
+                <input type="text" placeholder='link url' name="linkUrl" />
+                <input type="submit" name="" value="submit" />
+              </form>
+            </div>
           }
         </div>
       </div>
@@ -181,14 +210,8 @@ function Post({ setImgToShow, userName, imgs, post, renderPosts, posts, setPosts
       <div className='comment'>
         <img width={50} src="https://static.vecteezy.com/system/resources/previews/009/292/244/non_2x/default-avatar-icon-of-social-media-user-vector.jpg" />
         <h3>{post.name}</h3> <span>{post.time}</span>
-        <p>{post.comment}</p>
-        <div className="user-images">
-          {
-            post.images && post.images.map((img) => {
-              return <img onClick={() => setImgToShow(img)} className='user-img' key={crypto.randomUUID()} src={img} />
-            })
-          }
-        </div>
+        <div className='comment-content' dangerouslySetInnerHTML={{ __html: marked.parse(post.comment) }} />
+        
         <button className={commentLiked ? "liked" : ""} onClick={handleLikes} >👍 {likeCount}</button>
         <button className={commentDisliked ? "disliked" : ""} onClick={handleDislikes}>👎 {dislikeCount}</button>
         <button className="reply-btn" onClick={() => setReplying(!replying)}>🗩 Reply</button>
@@ -207,42 +230,5 @@ function Post({ setImgToShow, userName, imgs, post, renderPosts, posts, setPosts
   )
 }
 
-function ImageInput({ img, setImg, imgs, setImgs, setImagesDiv }) {
-  const [showAddImgDiv, setShowAddImgDiv] = useState(false)
-  const [addImgUrl, setAddImgUrl] = useState(true)
-
-  function handleAddImg(e) {
-    e.preventDefault();
-    setShowAddImgDiv(!showAddImgDiv)
-  }
-
-  function acceptImgSubmit(e) {
-    e.preventDefault();
-    const formData = new FormData(e.target)
-    const formObj = Object.fromEntries(formData)
-    setImg(formObj.imgUrl)
-    setImgs([...imgs, formObj.imgUrl])
-    setImagesDiv(true)
-    e.target.reset()
-    console.log(imgs)
-  }
-
-  return (
-    <>
-      <button onClick={handleAddImg}>🖼️</button>
-      {
-        showAddImgDiv && <div className="add-img-div">
-          {
-            addImgUrl && <form onSubmit={acceptImgSubmit}>
-              <input type="text" name='imgUrl' placeholder='url of the img' />
-              <input type="submit" />
-            </form>
-          }
-        </div>
-      }
-
-    </>
-  )
-}
 
 export default App
