@@ -73,6 +73,7 @@ function App() {
           </form>
           <InputControlField handleSelection={handleSelection} textareaRef={textareaRef} input={input} setInput={setInput} />
         </div>
+        <hr />
         <div className="posts-div">
           <div className="header">
             <h2>Comments <span className='comment-count'>{posts.length}</span></h2>

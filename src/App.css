@@ -119,8 +119,9 @@ h2 {
   background-color: var(--lightGray);
   border-radius: 20px;
   max-width: 750px;
-  width: 97%;
+  width: 95%;
   margin: auto;
+  margin-top: 15px;
   textarea {
     background-color: var(--lightGray);
     border: none;
