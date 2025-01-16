@@ -333,6 +333,7 @@ select {
     margin: 0;
   }
   img {
+    border-radius: 0;
     width: 100px;
     height: 100px;
   }
