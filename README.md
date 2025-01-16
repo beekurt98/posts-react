@@ -4,7 +4,7 @@ Comments & replies are done using recursion.
 
 Todo:
 - Add open clicked photo as dialog
-
+- Fix emoji screen
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
