@@ -119,7 +119,8 @@ h2 {
   background-color: var(--lightGray);
   border-radius: 20px;
   max-width: 750px;
-
+  width: 97%;
+  margin: auto;
   textarea {
     background-color: var(--lightGray);
     border: none;
@@ -140,7 +141,7 @@ h2 {
 
   .comment-submit-btn {
     position: relative;
-    left: 85%;
+    left: 82%;
     top: 10px;
   }
 
