@@ -1,5 +1,4 @@
 body {
-
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   font-size: 16px;
   margin: 0;
@@ -47,6 +46,7 @@ body {
   display: flex;
   align-items: center;
   gap: 5px;
+
   button {
     background-color: white;
   }
@@ -64,6 +64,8 @@ h2 {
   border-radius: 20px;
 }
 
+
+
 .sort-btn {
   width: 30px;
   background-color: white;
@@ -74,31 +76,39 @@ h2 {
   display: flex;
   flex-direction: row;
   align-items: center;
+
   .icon-button {
     width: 20px;
     margin-left: 10px;
+
     svg path {
       fill: var(--darkestGray);
     }
   }
+
   form {
     margin-left: 10px;
-    height: 60px;
+    height: 30px;
     display: flex;
     align-items: center;
-    gap:20px;
+    gap: 20px;
+
     input {
       border: none;
       border-radius: 5px;
     }
-    input[type="text"], input[type="url"] {
+
+    input[type="text"],
+    input[type="url"] {
       width: 30%;
       height: 20px;
       padding: 5px;
     }
+
     input:focus {
       outline: none;
     }
+
     input[type="submit"] {
       background-color: var(--orange);
       height: 30px;
@@ -108,10 +118,22 @@ h2 {
   }
 }
 
+.emoji-div {
+  margin-left: 30%;
+  display: block;
+  position: absolute;
+  z-index: 1;
+
+  button {
+    background-color: transparent;
+    display: flex;
+    align-items: center;
+  }
+}
 
 .comment-main-input {
   width: 80%;
-  height: 100px;
+  height: 60px;
   margin: auto;
 }
 
@@ -122,10 +144,13 @@ h2 {
   width: 95%;
   margin: auto;
   margin-top: 15px;
+  display: flex;
+  flex-direction: column;
+
   textarea {
     background-color: var(--lightGray);
     border: none;
-    margin: 20px;
+    margin: 13px;
     resize: none;
     width: 90%;
   }
@@ -134,31 +159,26 @@ h2 {
     fill: var(--darkestGray);
   }
 
-  button {
+  div>button {
     border: none;
     margin: 10px;
     background-color: var(--lightGray);
   }
 
-  .comment-submit-btn {
-    position: relative;
-    left: 82%;
-    top: 10px;
-  }
-
-  .control {
-    margin-top: -30px;
-  }
 }
 
 .comment-submit-btn {
   background-color: var(--orange);
   border: none;
   border-radius: 25px;
-  height: 30px;
+  height: 35px;
   width: 90px;
   color: white;
   font-weight: 700;
+  display: block;
+  margin-left: auto;
+  margin-bottom: 10px;
+  margin-right: 10px;
 }
 
 
@@ -179,7 +199,7 @@ h2 {
 
 textarea {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  font-size: 18px;
+  font-size: 16px;
 }
 
 
@@ -187,13 +207,21 @@ textarea:focus {
   outline: none;
 }
 
+hr {
+  width: 100%;
+  opacity: 20%;
+}
+
 .control {
   margin-left: 10px;
   display: flex;
   align-items: center;
   flex-wrap: wrap;
+  justify-content: start;
+  margin-bottom: 0;
+  height: 40px;
 
-  .control > button {
+  .control>button {
     width: 30px;
   }
 
@@ -201,6 +229,18 @@ textarea:focus {
     background-color: var(--lightGray);
   }
 }
+
+.left-margin {
+  margin-left: 40px;
+}
+
+/* .thread {
+  border-left: 3px solid var(--bgGray);
+  width: 0;
+  height: 20px;
+  margin-left: 29px;
+  margin-bottom: -10px;
+} */
 
 .comment {
   width: 90%;
@@ -227,6 +267,8 @@ textarea:focus {
     margin-top: 10px;
   }
 }
+
+
 
 select {
   font-weight: 700;
@@ -269,13 +311,17 @@ select {
   margin-left: 20px;
   display: flex;
   align-items: center;
+
+
   p {
     margin: 0;
     margin-left: 2px;
   }
+
   div {
     margin-top: 5px;
   }
+
   gap: 5px;
 }
 
@@ -293,7 +339,6 @@ select {
   background-color: var(--lightGray);
   border-radius: 20px;
 
-  /* background-color: red; */
   textarea {
     margin: 20px;
     resize: none;
@@ -305,24 +350,15 @@ select {
 
   }
 
-  button {
+  .icon-button {
     background-color: var(--lightGray);
-    margin: 10px;
+    margin: 5px;
+    border: none;
 
     svg path {
       fill: var(--darkestGray);
     }
 
-  }
-
-  .comment-submit-btn {
-    position: relative;
-    left: 82%;
-    top: 10px;
-  }
-
-  .control {
-    margin-top: -30px;
   }
 }
 
@@ -332,6 +368,7 @@ select {
   p {
     margin: 0;
   }
+
   img {
     border-radius: 0;
     width: 100px;
@@ -358,14 +395,14 @@ select {
   svg path {
     fill: red;
   }
-} 
+}
 
 .icon-button {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 30px; 
-  height: 30px; 
+  width: 28px;
+  height: 28px;
   padding: 6px;
   background-color: transparent;
   cursor: pointer;
@@ -376,36 +413,9 @@ select {
   height: 34px;
 }
 
-
-@media (max-width:750px) {
-  .write-comment .comment-submit-btn {
-    position: relative;
-    left: 80%;
-  }
-
-  .reply-div .comment-submit-btn {
-    position: relative;
-    left: 80%;
-  }
-
-}
-
 @media (max-width:610px) {
   textarea {
     margin: -10px;
-  }
-  .write-comment .comment-submit-btn {
-    position: relative;
-    width: 100%;
-    left: 0;
-    top: 65px;
-  }
-
-  .reply-div .comment-submit-btn {
-    position: relative;
-    width: 100%;
-    left: 0;
-    top: 65px;
   }
 
   .reply-div {
@@ -416,14 +426,10 @@ select {
     margin-top: 50px;
   }
 
-}
-
-@media (max-width:410px) {
-  .write-comment .comment-submit-btn{
-    top: 110px;
+  .left-margin {
+    margin-left: 0;
   }
 
-  .reply-div .comment-submit-btn{
-    top: 110px;
-  }
 }
+
+@media (max-width:410px) {}

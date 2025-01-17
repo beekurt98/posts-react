@@ -16,6 +16,7 @@ function App() {
   const [imgs, setImgs] = useState([])
   const [imgToShow, setImgToShow] = useState(null)
   const textareaRef = useRef(null)
+  const [mainPosts, setMainPosts] = useState([])
 
   useEffect(() => {
     async function getData() {
@@ -44,11 +45,16 @@ function App() {
     setPosts([...posts, newComment])
     e.target.reset()
     setInput("")
+    console.log(mainPosts)
   }
+
+  useEffect(() => {
+    setMainPosts([...posts])
+  }, [posts])
 
   function renderPosts(posts) {
     return posts.map((post) => {
-      return <Post setImgToShow={setImgToShow} imgs={imgs} userName={userName} setPosts={setPosts} posts={posts} key={crypto.randomUUID()} post={post} renderPosts={renderPosts} />
+      return <Post mainPosts={mainPosts} setImgToShow={setImgToShow} imgs={imgs} userName={userName} setPosts={setPosts} posts={posts} key={crypto.randomUUID()} post={post} renderPosts={renderPosts} />
     })
   }
   function handleSelection() {
@@ -67,13 +73,13 @@ function App() {
     <>
       <div className="main-container">
         <div className="write-comment">
+          <InputControlField handleSelection={handleSelection} textareaRef={textareaRef} input={input} setInput={setInput} />
+
           <form onSubmit={handleCommentSubmit}>
             <textarea ref={textareaRef} onSelect={handleSelection} onDoubleClick={handleSelection} autoComplete="off" className='comment-main-input' onChange={handleCommentInput} value={input} type="text" name="comment" id="" placeholder='Add comment...' ></textarea>
             <input type="submit" value="Submit" className='comment-submit-btn' />
           </form>
-          <InputControlField handleSelection={handleSelection} textareaRef={textareaRef} input={input} setInput={setInput} />
         </div>
-        <hr />
         <div className="posts-div">
           <div className="header">
             <h2>Comments <span className='comment-count'>{posts.length}</span></h2>
@@ -97,7 +103,7 @@ function App() {
   )
 }
 
-function Post({ setImgToShow, userName, imgs, post, renderPosts, posts, setPosts }) {
+function Post({ mainPosts, setImgToShow, userName, imgs, post, renderPosts, posts, setPosts }) {
   // like & dislike controls
   const [likeCount, setLikeCount] = useState(post.likes)
   const [dislikeCount, setDislikeCount] = useState(post.dislikes)
@@ -142,51 +148,56 @@ function Post({ setImgToShow, userName, imgs, post, renderPosts, posts, setPosts
     thisPost.replies.push(newReply)
     setReplyInput("")
     setReplying(false)
+    console.log(mainPosts)
   }
 
   function handleCommentInput(e) {
     setReplyInput(e.target.value)
   }
-  console.log("post", post)
   return (
     <>
-      <div className='comment'>
-        <div className="comment-left">
-          <img width={50} src={`https://ui-avatars.com/api/?name=${post.name.split(" ")[0]}+${post.name.split(" ")[1]}&background=random&bold=true&color=fff`} />
-        </div>
-        <div className="comment-right">
-
-          <h3>{post.name}<span>{post.time}</span></h3>
-          <div className='comment-content' dangerouslySetInnerHTML={{ __html: marked.parse(post.comment) }} />
-          <div className="feedback-cont">
-            <div className={commentLiked ? "liked feedback-div" : "feedback-div"}>
-              <button className="feedback-btn" onClick={handleLikes} >{thumbsUp}</button> <p className="feedback-count">{likeCount}</p>
-            </div>
-            <div className={commentDisliked ? "disliked feedback-div" : "feedback-div"}>
-              <button className="feedback-btn" onClick={handleDislikes}>{thumbsDown} </button><p className="feedback-count">{dislikeCount}</p>
-            </div>
-            <div className="feedback-div reply-btn" onClick={() => setReplying(!replying)}>
-              <div className="" >{replySvg}</div><p>Reply</p>
-            </div>
+      <div className={mainPosts.includes(post) ? "main-comment-div" : "main-comment-div left-margin"}>
+        <div className={mainPosts.includes(post) ? "" : "thread"}></div>
+        <div className='comment'>
+          <div className="comment-left">
+            <img width={50} src={`https://ui-avatars.com/api/?name=${post.name.split(" ")[0]}+${post.name.split(" ")[1]}&background=random&bold=true&color=fff`} />
           </div>
-          {
-            replying && <><div className="reply-div">
-              <form onSubmit={handleReply}>
-                <textarea ref={textareaReplyRef} onChange={handleCommentInput} value={replyInput} type="text" name='comment' placeholder='Add reply...'> </textarea>
-                <input type="submit" value="Submit" className='comment-submit-btn' />
-              </form>
-            
-              <InputControlField textareaRef={textareaReplyRef} input={replyInput} setInput={setReplyInput} />
+          <div className="comment-right">
+
+            <h3>{post.name}<span>{post.time}</span></h3>
+            <div className='comment-content' dangerouslySetInnerHTML={{ __html: marked.parse(post.comment) }} />
+            <div className="feedback-cont">
+              <div className={commentLiked ? "liked feedback-div" : "feedback-div"}>
+                <button className="feedback-btn" onClick={handleLikes} >{thumbsUp}</button> <p className="feedback-count">{likeCount}</p>
               </div>
-            </>
+              <div className={commentDisliked ? "disliked feedback-div" : "feedback-div"}>
+                <button className="feedback-btn" onClick={handleDislikes}>{thumbsDown} </button><p className="feedback-count">{dislikeCount}</p>
+              </div>
+              <div className="feedback-div reply-btn" onClick={() => setReplying(!replying)}>
+                <div className="" >{replySvg}</div><p>Reply</p>
+              </div>
+            </div>
 
-          }
-          <div className='replies-container'>
-            {post.replies && renderPosts(post.replies)}
           </div>
+
+        </div>
+        {
+          replying && <><div className="reply-div">
+            <InputControlField textareaRef={textareaReplyRef} input={replyInput} setInput={setReplyInput} />
+
+            <form onSubmit={handleReply}>
+              <textarea ref={textareaReplyRef} onChange={handleCommentInput} value={replyInput} type="text" name='comment' placeholder='Add reply...'> </textarea>
+              <input type="submit" value="Submit" className='comment-submit-btn' />
+            </form>
+
+          </div>
+          </>
+
+        }
+        <div className='replies-container'>
+          {post.replies && renderPosts(post.replies)}
         </div>
       </div>
-
     </>
   )
 }
@@ -236,7 +247,6 @@ function InputControlField({ textareaRef, input, setInput }) {
     const formData = new FormData(e.target)
     const formObj = Object.fromEntries(formData)
     setInput(prevInput => prevInput + `![${formObj.imgAlt}](${formObj.imgUrl})`)
-
     e.target.reset()
   }
   return (
@@ -253,8 +263,11 @@ function InputControlField({ textareaRef, input, setInput }) {
         <button className="icon-button" type='button' onClick={(e) => { e.preventDefault(); setEmojiScreen(!emojiScreenOn); setShowLink(false); setAddImg(false) }}>{emojiSvg}</button>
 
       </div>
+
       {
-        emojiScreenOn && <EmojiPicker onEmojiClick={handleEmoji} />
+        emojiScreenOn && <div className="emoji-div">
+          <EmojiPicker onEmojiClick={handleEmoji} />
+        </div>
       }
       {
         addImg && <div className='addMedia'>
@@ -276,6 +289,7 @@ function InputControlField({ textareaRef, input, setInput }) {
           </form>
         </div>
       }
+      <hr />
 
     </>
   )
