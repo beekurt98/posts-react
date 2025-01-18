@@ -76,7 +76,7 @@ function App() {
           <InputControlField handleSelection={handleSelection} textareaRef={textareaRef} input={input} setInput={setInput} />
 
           <form onSubmit={handleCommentSubmit}>
-            <textarea ref={textareaRef} onSelect={handleSelection} onDoubleClick={handleSelection} autoComplete="off" className='comment-main-input' onChange={handleCommentInput} value={input} type="text" name="comment" id="" placeholder='Add comment...' ></textarea>
+            <textarea required ref={textareaRef} onSelect={handleSelection} onDoubleClick={handleSelection} autoComplete="off" className='comment-main-input' onChange={handleCommentInput} value={input} type="text" name="comment" id="" placeholder='Add comment...' ></textarea>
             <input type="submit" value="Submit" className='comment-submit-btn' />
           </form>
         </div>
@@ -99,6 +99,8 @@ function App() {
       <dialog >
         {imgToShow}
       </dialog>
+
+      <footer></footer>
     </>
   )
 }
@@ -160,7 +162,7 @@ function Post({ mainPosts, setImgToShow, userName, imgs, post, renderPosts, post
         <div className={mainPosts.includes(post) ? "" : "thread"}></div>
         <div className='comment'>
           <div className="comment-left">
-            <img width={50} src={`https://ui-avatars.com/api/?name=${post.name.split(" ")[0]}+${post.name.split(" ")[1]}&background=random&bold=true&color=fff`} />
+            <img src={`https://ui-avatars.com/api/?name=${post.name.split(" ")[0]}+${post.name.split(" ")[1]}&background=random&bold=true&color=fff`} />
           </div>
           <div className="comment-right">
 
@@ -186,7 +188,7 @@ function Post({ mainPosts, setImgToShow, userName, imgs, post, renderPosts, post
             <InputControlField textareaRef={textareaReplyRef} input={replyInput} setInput={setReplyInput} />
 
             <form onSubmit={handleReply}>
-              <textarea ref={textareaReplyRef} onChange={handleCommentInput} value={replyInput} type="text" name='comment' placeholder='Add reply...'> </textarea>
+              <textarea required ref={textareaReplyRef} onChange={handleCommentInput} value={replyInput} type="text" name='comment' placeholder='Add reply...'> </textarea>
               <input type="submit" value="Submit" className='comment-submit-btn' />
             </form>
 
